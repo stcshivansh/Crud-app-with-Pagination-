@@ -4,26 +4,27 @@ import viteLogo from '/vite.svg'
 import './App.css'
 import toast, { Toaster } from 'react-hot-toast';
 import Home from './pages/Home'
-import { BrowserRouter, Routes, Route } from "react-router";
+import {  Routes, Route } from "react-router";
 import Navbar from './components/Navbar'
 import About from './pages/About'
 import Products from './pages/Product'
-
-
+import { useLocation } from 'react-router';
+import ProductsModal from './components/ProductModal';
 function App() {
-
 
   return (
     <div>
-      <BrowserRouter>
         <Navbar/>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
-          <Route path="/Products" element={<Products />} />
+          <Route path="/products" element={<Products />}>
+            <Route path="add" element={<ProductsModal />} />
+            <Route path=":id/edit" element={<ProductsModal />} />
+          </Route>
+          <Route path="*" element={<Products />} />
         </Routes>
         <Toaster />
-      </BrowserRouter>
     </div>
   )
 }

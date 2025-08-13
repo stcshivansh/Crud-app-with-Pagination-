@@ -1,6 +1,67 @@
 import { apiConnector } from "./axios.js";
 import { getATfromDB } from "../utils/getATfromDb.js";
 
+const fetchSingleProduct =async(id)=>{
+  try {
+
+      const AT = await getATfromDB(process.env.SHOP)
+      const headers = {
+          "X-Shopify-Access-Token": AT ,
+          "Content-Type": "application/json",
+      };
+      const query =`
+        query getAllProducts($id: ID!) {
+        product(id: $id) {
+          id
+          title
+          description
+          metafields(namespace: "custom", first: 100) {
+            edges {
+              node {
+                value
+                type
+                key
+                namespace
+              }
+            }
+          }
+          variants(first:100) {
+            edges {
+              node {
+                id
+                sku
+                selectedOptions {
+                  name
+                  value
+                }
+              }
+            }
+          }
+        }
+      }
+      `
+      const variables={id}
+      const countData = await apiConnector('POST',{query,variables},headers)
+      const finalData={
+        id:countData.data.product.id,
+        title:countData.data.product.title,
+        description:countData.data.product.description,
+        metafields:countData.data.product.metafields.edges?.map((meta)=>meta.node),
+        variants:countData.data.product.variants.edges.map((variant)=>{
+          return{
+            id:variant.node.id,
+            sku:variant.node.sku,
+            selectedOptions:variant.node.selectedOptions
+          }
+        }),
+      }
+      
+      return finalData
+  } catch (error) {
+      console.error("GraphQL error in service", error);
+      throw error;
+  }
+}
 const fetchProducts = async (first,after,last,before)=>{
   try {
       const AT = await getATfromDB(process.env.SHOP)
@@ -10,7 +71,7 @@ const fetchProducts = async (first,after,last,before)=>{
       };
     const query = `
       query ShopName($first: Int, $after: String,$last: Int, $before: String) {
-        products(first: $first, after: $after ,last: $last, before: $before) {
+        products(first: $first, after: $after ,last: $last, before: $before ,reverse: true) {
           edges {
             node {
               id
@@ -120,6 +181,7 @@ const createProducts = async (title,description,metafields)=>{
         title,descriptionHtml:`<strong>${description}</strong>`,metafields
       }
     };
+    console.log(metafields)
     // const client = new shopify.api.clients.Graphql({ session });
     // const response = await client.request(query, {variables});
     const response = await apiConnector('POST',{query,variables},headers)
@@ -330,4 +392,4 @@ const updateSku = async (variantId, sku,productId) => {
   }
 };
 
-export {updateProduct, fetchProducts,createProducts,deleteProduct,deleteMetafield,updateMetafield,updateSku };
+export {updateProduct, fetchProducts,createProducts,deleteProduct,deleteMetafield,updateMetafield,updateSku,fetchSingleProduct };

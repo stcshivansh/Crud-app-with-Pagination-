@@ -1,3 +1,4 @@
+
 const ShimmerCard = () => {
   return (
     <div className="animate-pulse max-w-md p-6 bg-[#0f172a] border border-gray-700 rounded-xl w-full">

@@ -10,7 +10,7 @@ const Navbar = () => {
     }`;
     console.log(location.pathname.split("/")[1])
   return (
-    <nav className="fixed bg-gray-900 text-white shadow-md h-[4rem] w-screen border  border-white " style={{ boxShadow: "inset 0px -1px 10px 0px" }}>
+    <nav className="fixed bg-gray-900 text-white shadow-md h-[4rem] w-screen border  border-white  z-10" style={{ boxShadow: "inset 0px -1px 10px 0px" }}>
       <div className="container mx-auto  flex justify-center px-4 py-3 ">
         <ul className="flex gap-8 text-3xl font-medium">
           <li>

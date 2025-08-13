@@ -4,6 +4,7 @@ const ProductApi={
     DELETE_PRODUCT :'/deleteProduct',
     GET_PRODUCT : '/getAllProducts',
     DELETE_META : '/deleteMetaField',
-    UPDATE_META: '/updateMetaField'
+    UPDATE_META: '/updateMetaField',
+    SINGLE_PRODUCT : '/getSingleProduct'
 }
 export default ProductApi

@@ -1,4 +1,19 @@
-import {updateProduct as updateProductService, fetchProducts ,createProducts,deleteProduct as deleteProductService,deleteMetafield as deleteMeta,updateMetafield,updateSku as updateSkuField} from '../service/product.service.js';
+import {updateProduct as updateProductService, fetchProducts ,createProducts,deleteProduct as deleteProductService,deleteMetafield as deleteMeta,updateMetafield,updateSku as updateSkuField ,fetchSingleProduct} from '../service/product.service.js';
+const getSingleProduct =  async (req, res) => {
+  try {
+    const {id}= req.headers
+    // console.log(req.headers)
+    // console.log(id)
+    if(!id)return res.status(403).json({message:"idis required"})
+
+    const products = await fetchSingleProduct(id);
+    return res.status(200).json(products);
+
+  } catch (error) {
+    console.error("GraphQL error", error);
+    return res.status(500).json({ error: error.message });
+  }
+}
 const getProducts =  async (req, res) => {
   try {
     const {first,startcursor,endcursor,last}= req.headers
@@ -21,8 +36,9 @@ const getProducts =  async (req, res) => {
 const createProduct = async (req, res) => {
   try {
     const {title,description,options,variants,metafields} = req.body
+    console.log(metafields)
     if(!title||!description)return res.status(401).json({message:"title or description is missing"})
-    const result = await createProducts(title,description,variants,options,metafields)
+    const result = await createProducts(title,description,metafields)
     res.status(201).json(result)
     
   } catch (error) {
@@ -123,4 +139,4 @@ const updateMeta = async (req, res) => {
 
 
 
-export {getProducts,createProduct,deleteProduct,updateProduct,deleteMetafield,updateMeta,updateSku}
+export {getProducts,createProduct,deleteProduct,updateProduct,deleteMetafield,updateMeta,updateSku,getSingleProduct}

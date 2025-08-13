@@ -3,7 +3,7 @@
 client_id = "7731ba3a67db45cd5e6a816d0b134b75"
 name = "mern-crud-app"
 handle = "mern-crud-app"
-application_url = "https://residential-agrees-supported-abandoned.trycloudflare.com"
+application_url = "https://nottingham-wondering-focused-connecticut.trycloudflare.com"
 embedded = true
 
 [build]
@@ -18,7 +18,7 @@ api_version = "2025-07"
 scopes = "write_products"
 
 [auth]
-redirect_urls = ["https://residential-agrees-supported-abandoned.trycloudflare.com/auth/callback", "https://residential-agrees-supported-abandoned.trycloudflare.com/auth/shopify/callback", "https://residential-agrees-supported-abandoned.trycloudflare.com/api/auth/callback"]
+redirect_urls = ["https://nottingham-wondering-focused-connecticut.trycloudflare.com/auth/callback", "https://nottingham-wondering-focused-connecticut.trycloudflare.com/auth/shopify/callback", "https://nottingham-wondering-focused-connecticut.trycloudflare.com/api/auth/callback"]
 
 [pos]
 embedded = false

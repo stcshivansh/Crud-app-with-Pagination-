@@ -1,7 +1,8 @@
-import { createProduct, deleteProduct, getProducts, updateProduct,deleteMetafield,updateMeta,updateSku } from "../controller/product.controller.js";
+import { createProduct, deleteProduct, getProducts, updateProduct,deleteMetafield,updateMeta,updateSku,getSingleProduct } from "../controller/product.controller.js";
 import express from "express";
 const router = express.Router();
 
+router.get("/getSingleProduct",getSingleProduct);
 router.get("/getAllProducts",getProducts);
 router.post("/createProduct",createProduct);
 router.delete("/deleteProduct",deleteProduct);
