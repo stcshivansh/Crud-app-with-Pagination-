@@ -108,6 +108,9 @@ const fetchProducts = async (first,after,last,before)=>{
               startCursor
             }
         }
+        productsCount{
+           count
+        }
       }
     `;
     // const client = new shopify.api.clients.Graphql({ session });
@@ -146,7 +149,13 @@ const fetchProducts = async (first,after,last,before)=>{
         )
       }}
     )
-    finalData.push({pageInfo:countData?.data?.products?.pageInfo})
+    finalData.push({
+      pageInfo:countData?.data?.products?.pageInfo,
+      count: {
+        productsCount: countData?.data?.productsCount?.count
+      }
+    })
+    
     return finalData;
     // return filteredData;
     } catch (error) {

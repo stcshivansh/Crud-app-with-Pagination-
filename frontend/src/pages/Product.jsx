@@ -120,7 +120,7 @@ const Products = () => {
       </div>
       <div className='max-w-7xl mx-auto flex justify-between mt-10'>
         <button onClick={()=>pageHandler(page-1,'prev')} disabled={loading} className={pageDetails?.pageInfo?.hasPreviousPage==false ? " opacity-0 invisible":" "}>Prev</button>
-        <span className=' text-2xl'>Page No {page}</span>
+        <span className=' text-2xl'>Page No {page} of {Math.ceil(pageDetails?.count?.productsCount/10) || 1}</span>
         <button onClick={()=>pageHandler(page+1,'next')} disabled={loading} className={pageDetails?.pageInfo?.hasNextPage==false ? " opacity-0 invisible":" "}>Next</button>
       </div>
       <div className="max-w-7xl mx-auto px-6 py-12 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 ">
