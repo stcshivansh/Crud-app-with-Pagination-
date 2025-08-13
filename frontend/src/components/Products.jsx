@@ -6,7 +6,6 @@ const ProductCard = ({ product,setConfirm,deleteHandler,idToDelete }) => {
   const location = useLocation();
   const findId = (id) => {
     const res = id.split('/')
-    console.log(res)
     return res[res.length-1]
   }
   return (

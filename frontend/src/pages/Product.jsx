@@ -28,7 +28,6 @@ const Products = () => {
   const fetchData= async()=>{
     try {
       setLoading(true)
-      console.log(headers?.current)
       const response = await apiConnector('GET',GET_PRODUCT,null,headers?.current);
       const pageApi = response[response.length-1]
       
@@ -73,10 +72,8 @@ const Products = () => {
       const response = await apiConnector('DELETE',DELETE_PRODUCT,{id});
       toast.dismiss(toastId)
       const filteredData = allProducts.filter((ele)=>ele.id !==id)
-      console.log("filtered data",filteredData)
       setAllProducts(filteredData)
       toast.success("Deleted successfully")
-      console.log(response)
     } catch (error) {
       console.log(error)
     }

@@ -2,9 +2,8 @@ import {updateProduct as updateProductService, fetchProducts ,createProducts,del
 const getSingleProduct =  async (req, res) => {
   try {
     const {id}= req.headers
-    // console.log(req.headers)
-    // console.log(id)
-    if(!id)return res.status(403).json({message:"idis required"})
+
+    if(!id)return res.status(400).json({message:"id is required"})
 
     const products = await fetchSingleProduct(id);
     return res.status(200).json(products);
@@ -17,7 +16,7 @@ const getSingleProduct =  async (req, res) => {
 const getProducts =  async (req, res) => {
   try {
     const {first,startcursor,endcursor,last}= req.headers
-    if(first && last)return res.status(403).json({message:"first or last is required"})
+    if(first && last)return res.status(400).json({message:"first or last is required"})
     
     if(!first && !last){
       const products = await fetchProducts(10);
@@ -60,7 +59,7 @@ const deleteProduct =  async (req, res) => {
 const updateProduct = async (req, res) => {
   try {
     const {id,title,description} = req.body
-    if(!id||!title||!description)return res.status(401).json({message:"id ,title or description is missing"})
+    if(!id||!title||!description)return res.status(400).json({message:"id ,title or description is missing"})
     const response =await updateProductService(id,title,description)
     res.status(200).json(response.data);
     
@@ -72,7 +71,7 @@ const updateProduct = async (req, res) => {
 const deleteMetafield = async (req, res) => {
     try {
         const { id, namespace, key } = req.body;
-        if(!id||!namespace||!key)return res.status(401).json({message:"id ,namespace or key is missing"})
+        if(!id||!namespace||!key)return res.status(400).json({message:"id ,namespace or key is missing"})
         const response =await deleteMeta(id, namespace, key);
         return res.status(200).json(response.data);
     } catch (err) {

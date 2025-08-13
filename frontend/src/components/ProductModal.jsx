@@ -1,5 +1,6 @@
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { ImCross } from "react-icons/im";
+import { PuffLoader } from "react-spinners";
 import { useEffect, useRef, useState } from "react";
 import ProductApi from '../apis/apis'
 const {SINGLE_PRODUCT,UPDATE_PRODUCT,UPDATE_META, CREATE_PRODUCT,DELETE_META} = ProductApi
@@ -12,7 +13,7 @@ const ProductsModal = () => {
   let { id } = useParams(); 
   id="gid://shopify/Product/" + id;
   const [check,setCheck] = useState(false);
-
+  const [m,setM]=useState(false)
   const isEditMode = location.pathname.includes("edit");
   const [product, setProduct] = useState({
     title:"",
@@ -31,12 +32,16 @@ const ProductsModal = () => {
   };
   const fetchData= async()=>{
       try {
+        // setLoading
+        setM(true)
         const response = await apiConnector('GET',SINGLE_PRODUCT,null,{id});
         setProduct(response)
-        console.log(response);
       } catch (error) {
         console.log(error)
         navigate('/products'); 
+      }
+      finally{
+        setM(false)
       }
     }
     const changeHandler=(e)=>{
@@ -169,7 +174,6 @@ const ProductsModal = () => {
             });
             toast.dismiss(toastId)
             toast.success("Deleted successfully")
-            console.log(response)
             fetchData()
             } 
         catch (error) {
@@ -186,65 +190,66 @@ const ProductsModal = () => {
       fetchData();
     }
   },[id])
-  useEffect(()=>{
-     console.log(product)
-  },[product])
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center min-h-screen" style={{ backgroundColor: "rgba(0, 0, 0, 0.5)", backdropFilter: "blur(2px)",  }}>
       <div className="bg-black p-6 rounded-md w-fit relative border border-white shadow-[0_0_10px_2px_rgba(255,255,255,0.3)]">
-        <button
-          className="absolute top-2 right-2 text-red-500"
-          onClick={closeModal}
-        >
-          <ImCross size={16} />
-        </button>
-        <h2 className="text-xl font-bold mb-4">{isEditMode?"Edit":"Add"} Product</h2>
+       { m ?<PuffLoader color="#36d7b7" size={60} />:
+        <div>
+          <button
+            className="absolute top-2 right-2 text-red-500"
+            onClick={closeModal}
+          >
+            <ImCross size={16} />
+          </button>
+          <h2 className="text-xl font-bold mb-4">{isEditMode?"Edit":"Add"} Product</h2>
 
-        {/* Your form content here */}
-        <div className="flex gap-8 mb-4w">
-          <div className="flex flex-col gap-4">
-            <label htmlFor='title'>Title</label>
-            <input id='title' name='title' value={product.title || ""} className=' p-1' onChange={changeHandler}/>
-            <label htmlFor='description'>Description</label>
-            <textarea className='border border-white rounded-md p-1.5'
-            rows={4} id='description' name='description' value={product.description || ""} onChange={changeHandler}/>
-            <label>Metafields</label>
-            <label htmlFor='key'>Key</label>
-            <input id='key' name='key' disabled={meta.disable} value={meta?.key|| ""} onChange={metaHandler}/>
-            <label htmlFor='value'>Value</label>
-            <input id='value' name='value' value={meta?.value || ""} onChange={metaHandler}/>
-            <button className=' rounded-md w-fit' onClick={addMetaHandler}>Add meta</button>
-            <button className=' rounded-md w-fit' onClick={()=>{
-              checkValidation()
-            }}>{isEditMode ?"Update Product" : "Add Product"}</button>
-          </div>
-          <div className=' flex flex-col gap-3 '>
-            <span>Title : {product.title || ""}</span>
-            <span>Description : {product.description|| ""}</span>
-            <span>Metafields :</span>
-            <div className=" max-h-32">
-              {
-                product && product.metafields.map((prod,index)=>(
-                <div className='flex justify-between items-center gap-4'>
-                  <div className=" w-fit">        
-                    <span>Key : {prod.key}</span><br/>
-                    <span>Value : {prod.value}</span>
-                  </div>
-                  <div className=" ">
-                    <button className=' rounded-md h-10' onClick={()=>editHandler(index)}>edit</button>
-                    <button className=' rounded-md h-10' onClick={()=>filterHelper(index)}>
-                      <ImCross size={10} />
-                    </button>
-
-                  </div>
-                </div>
-              ))
-            }
+          {/* Your form content here */}
+          <div className="flex gap-8 mb-4w">
+            <div className="flex flex-col gap-4">
+              <label htmlFor='title'>Title</label>
+              <input id='title' name='title' value={product.title || ""} className=' p-1' onChange={changeHandler}/>
+              <label htmlFor='description'>Description</label>
+              <textarea className='border border-white rounded-md p-1.5'
+              rows={4} id='description' name='description' value={product.description || ""} onChange={changeHandler}/>
+              <label>Metafields</label>
+              <label htmlFor='key'>Key</label>
+              <input id='key' name='key' disabled={meta.disable} value={meta?.key|| ""} onChange={metaHandler}/>
+              <label htmlFor='value'>Value</label>
+              <input id='value' name='value' value={meta?.value || ""} onChange={metaHandler}/>
+              <button className=' rounded-md w-fit' onClick={addMetaHandler}>Add meta</button>
+              <button className=' rounded-md w-fit' onClick={()=>{
+                checkValidation()
+              }}>{isEditMode ?"Update Product" : "Add Product"}</button>
             </div>
-        </div>
-        </div>
+            <div className=' flex flex-col gap-3 '>
+              <span>Title : {product.title || ""}</span>
+              <span>Description : {product.description|| ""}</span>
+              <span>Metafields :</span>
+              <div className=" max-h-32">
+                {
+                  product && product.metafields.map((prod,index)=>(
+                  <div className='flex justify-between items-center gap-4'>
+                    <div className=" w-fit">        
+                      <span>Key : {prod.key}</span><br/>
+                      <span>Value : {prod.value}</span>
+                    </div>
+                    <div className=" ">
+                      <button className=' rounded-md h-10' onClick={()=>editHandler(index)}>edit</button>
+                      <button className=' rounded-md h-10' onClick={()=>filterHelper(index)}>
+                        <ImCross size={10} />
+                      </button>
+
+                    </div>
+                  </div>
+                ))
+              }
+              </div>
+          </div>
+          </div>
+          {check&&<ConfirmationModal setCheck={setCheck} filterHandler={filterHandler}/>}
+        </div>}
       </div>
-      {check&&<ConfirmationModal setCheck={setCheck} filterHandler={filterHandler}/>}
+      
     </div>
   );
 };
